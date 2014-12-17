@@ -1,7 +1,7 @@
 
 
 
-base_dir=datasets/ILSVRC2014
+base_dir=`pwd`/datasets/ILSVRC2014
 
 #name=exp-baseline
 #n_neg=10000
@@ -9,7 +9,7 @@ base_dir=datasets/ILSVRC2014
 name=sanity-check
 n_neg=100
 n_pos=100
-output_dir=datasets/VOCdevkit2007/data/$name
+output_dir=`pwd`/datasets/VOCdevkit2007/data/$name
 
 sets=(train val test)
 

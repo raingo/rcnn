@@ -22,7 +22,7 @@ try
 catch
   VOCopts = imdb.details.VOCopts;
 
-  addpath(fullfile(VOCopts.datadir, 'VOCcode')); 
+  addpath(fullfile(VOCopts.rootdir, 'VOCcode')); 
 
   roidb.name = imdb.name;
 
@@ -44,7 +44,7 @@ catch
     roidb.rois(i) = attach_proposals(voc_rec, regions.boxes{i}, imdb.class_to_id);
   end
 
-  rmpath(fullfile(VOCopts.datadir, 'VOCcode')); 
+  rmpath(fullfile(VOCopts.rootdir, 'VOCcode')); 
 
   fprintf('Saving roidb to cache...');
   save(cache_file, 'roidb', '-v7.3');

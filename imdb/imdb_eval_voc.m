@@ -42,7 +42,7 @@ image_ids = imdb.image_ids;
 test_set = VOCopts.testset;
 year = VOCopts.dataset(4:end);
 
-addpath(fullfile(VOCopts.datadir, 'VOCcode')); 
+addpath(fullfile(VOCopts.rootdir, 'VOCcode')); 
 
 if use_res_salt
   prev_rng = rng;
@@ -104,4 +104,4 @@ if rm_res
   delete(res_fn);
 end
 
-rmpath(fullfile(VOCopts.datadir, 'VOCcode')); 
+rmpath(fullfile(VOCopts.rootdir, 'VOCcode')); 
