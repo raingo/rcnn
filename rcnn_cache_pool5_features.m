@@ -85,11 +85,17 @@ for i = opts.start:opts.end
   d = roidb.rois(i);
   im = imread(imdb.image_at(i));
 
+  if ndims(im) < 3
+      im = cat(3, im, im, im);
+  end
+
   th = tic;
   d.feat = rcnn_features(im, d.boxes, rcnn_model);
   fprintf(' [features: %.3fs]\n', toc(th));
 
   th = tic;
+  save_dir = fileparts(save_file);
+  mkdir_if_missing(save_dir);
   save(save_file, '-struct', 'd');
   fprintf(' [saving:   %.3fs]\n', toc(th));
 

@@ -55,6 +55,9 @@ else
 end
 res_fn = sprintf(VOCopts.detrespath, res_id, cls);
 
+res_dir = fileparts(res_fn);
+mkdir_if_missing(res_dir);
+
 % write out detections in PASCAL format and score
 fid = fopen(res_fn, 'w');
 for i = 1:length(image_ids);
@@ -73,7 +76,8 @@ ap = 0;
 ap_auc = 0;
 
 do_eval = (str2num(year) <= 2007) | ~strcmp(test_set, 'test');
-if do_eval
+% if do_eval || true
+if true
   % Bug in VOCevaldet requires that tic has been called first
   tic;
   [recall, prec, ap] = VOCevaldet(VOCopts, res_id, cls, true);

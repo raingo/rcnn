@@ -27,14 +27,17 @@ catch
   roidb.name = imdb.name;
 
   fprintf('Loading region proposals...');
-  regions_file = sprintf('./data/selective_search_data/%s', roidb.name);
+  regions_file = sprintf('./data/selective_search_data/%s.mat', roidb.name);
+  if ~exist(regions_file, 'file')
+      region_for_voc(imdb, regions_file);
+  end
   regions = load(regions_file);
   fprintf('done\n');
 
   for i = 1:length(imdb.image_ids)
     tic_toc_print('roidb (%s): %d/%d\n', roidb.name, i, length(imdb.image_ids));
     try
-      voc_rec = PASreadrecord(sprintf(VOCopts.annopath, imdb.image_ids{i}));
+      voc_rec = PASreadrecord(sprintf(VOCopts.annopath, imdb.image_ids{i}), VOCopts);
     catch
       voc_rec = [];
     end
@@ -62,7 +65,7 @@ boxes = boxes(:, [2 1 4 3]);
 %        boxes: [2108x4 single]
 %         feat: [2108x9216 single]
 %        class: [2108x1 uint8]
-if isfield(voc_rec, 'objects')
+if isfield(voc_rec, 'objects') && ~isempty(voc_rec.objects)
   gt_boxes = cat(1, voc_rec.objects(:).bbox);
   all_boxes = cat(1, gt_boxes, boxes);
   gt_classes = class_to_id.values({voc_rec.objects(:).class});

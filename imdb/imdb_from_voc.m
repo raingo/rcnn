@@ -31,13 +31,12 @@ cache_file = ['./imdb/cache/imdb_voc_' year '_' image_set];
 try
   load(cache_file);
 catch
-  VOCopts = get_voc_opts(root_dir);
+  VOCopts = get_voc_opts(root_dir, year);
   VOCopts.testset = image_set;
 
   imdb.name = ['voc_' year '_' image_set];
-  imdb.image_dir = fileparts(VOCopts.imgpath);
+  [imdb.image_dir, ~, imdb.extension] = fileparts(VOCopts.imgpath);
   imdb.image_ids = textread(sprintf(VOCopts.imgsetpath, image_set), '%s');
-  imdb.extension = 'jpg';
   imdb.classes = VOCopts.classes;
   imdb.num_classes = length(imdb.classes);
   imdb.class_to_id = ...
@@ -51,7 +50,7 @@ catch
   imdb.eval_func = @imdb_eval_voc;
   imdb.roidb_func = @roidb_from_voc;
   imdb.image_at = @(i) ...
-      sprintf('%s/%s.%s', imdb.image_dir, imdb.image_ids{i}, imdb.extension);
+      sprintf('%s/%s%s', imdb.image_dir, imdb.image_ids{i}, imdb.extension);
 
   for i = 1:length(imdb.image_ids)
     tic_toc_print('imdb (%s): %d/%d\n', imdb.name, i, length(imdb.image_ids));
