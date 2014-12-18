@@ -6,9 +6,11 @@ base_dir=`pwd`/datasets/ILSVRC2014
 #name=exp-baseline
 #n_neg=10000
 #n_pos=10000000
+
 name=sanity-check
 n_neg=100
 n_pos=100
+
 output_dir=`pwd`/datasets/VOCdevkit2007/data/$name
 
 sets=(train val test)
@@ -31,7 +33,7 @@ meta_det_txt=$base_dir/ILSVRC2014_devkit/data/meta-det.txt
 det_lists_dir=$base_dir/ILSVRC2014_devkit/data/det_lists
 
 # train set
-for cls in `cat $output_dir/cls-list.txt` 
+for cls in `cat $output_dir/cls-list.txt`
 do
     cls_id=`cat $meta_det_txt | grep $cls | awk -F'\t' '{print $1}'`
     echo $cls $cls_id
@@ -46,7 +48,7 @@ echo linking train set
 # val set
 echo linking val set
 cat $det_lists_dir/val.txt | awk '{print $1}' | sort -R | head -$n_pos > $sets_dir/val.txt
-./link_files.sh $base_dir/ILSVRC2013_DET_val $sets_dir/val.txt JPEG $jpg_dir 
+./link_files.sh $base_dir/ILSVRC2013_DET_val $sets_dir/val.txt JPEG $jpg_dir
 ./link_files.sh $base_dir/ILSVRC2013_DET_bbox_val $sets_dir/val.txt xml $anno_dir 2>&1 /dev/null
 
 # test set
