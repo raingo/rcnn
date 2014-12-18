@@ -11,3 +11,4 @@ rcnn_config_local.m
 cachedir/*
 external/caffe
 *.tgz
+*.swp

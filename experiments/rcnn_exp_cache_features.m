@@ -1,18 +1,17 @@
 function rcnn_exp_cache_features(chunk)
 
 % -------------------- CONFIG --------------------
-net_file     = './data/caffe_nets/finetune_voc_2007_trainval_iter_70k';
-cache_name   = 'v1_finetune_voc_2007_trainval_iter_70k';
-crop_mode    = 'warp';
-crop_padding = 16;
+voc_config = get_cur_voc_name();
+net_file = voc_config.net_file;
+cache_namae = voc_config.cache_name;
+crop_mode    = voc_config.crop_mode;
+crop_padding = voc_config.crop_padding;
+name = voc_config.name;
 
 % change to point to your VOCdevkit install
 VOCdevkit = './datasets/VOCdevkit2007';
 % ------------------------------------------------
 
-%name = 'VOC2007';
-%name = 'sanity-check';
-name = get_cur_voc_name();
 imdb_trainval = imdb_from_voc(VOCdevkit, 'trainval', name);
 
 switch chunk

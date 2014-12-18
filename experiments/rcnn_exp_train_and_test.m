@@ -2,10 +2,13 @@ function [res_test, res_train, rcnn_model] = rcnn_exp_train_and_test()
 % Runs an experiment that trains an R-CNN model and tests it.
 
 % -------------------- CONFIG --------------------
-net_file     = './data/caffe_nets/finetune_voc_2007_trainval_iter_70k';
-cache_name   = 'v1_finetune_voc_2007_trainval_iter_70k';
-crop_mode    = 'warp';
-crop_padding = 16;
+voc_config = get_cur_voc_name();
+net_file = voc_config.net_file;
+cache_namae = voc_config.cache_name;
+crop_mode    = voc_config.crop_mode;
+crop_padding = voc_config.crop_padding;
+name = voc_config.name;
+
 layer        = 7;
 k_folds      = 0;
 
@@ -13,17 +16,15 @@ k_folds      = 0;
 VOCdevkit = './datasets/VOCdevkit2007';
 % ------------------------------------------------
 
-%name = 'sanity-check';
-name = get_cur_voc_name();
-imdb_train = imdb_from_voc(VOCdevkit, 'trainval', name);
-% imdb_test = imdb_from_voc(VOCdevkit, 'test', name);
+train_set = 'train';
+imdb_train = imdb_from_voc(VOCdevkit, train_set, name);
 imdb_test = imdb_from_voc(VOCdevkit, 'val', name);
 
-model_save_path = fullfile('data', 'rcnn_models', name, sprintf('rcnn_model-%s-%d-%d-%d.mat', crop_mode, crop_padding, layer, k_folds));
+model_save_path = fullfile('data', 'rcnn_models', name, cache_name, sprintf('rcnn_model-%s-%s-%d-%d-%d.mat', train_set, crop_mode, crop_padding, layer, k_folds));
 model_dir = fileparts(model_save_path);
 mkdir_if_missing(model_dir);
 
-if exist(model_save_path, 'file')
+if exist(model_save_path, 'file') 
     clear rcnn_model rcnn_k_fold_model
     load(model_save_path);
 else
