@@ -4,7 +4,7 @@ function [res_test, res_train, rcnn_model] = rcnn_exp_train_and_test()
 % -------------------- CONFIG --------------------
 voc_config = get_cur_voc_name();
 net_file = voc_config.net_file;
-cache_namae = voc_config.cache_name;
+cache_name = voc_config.cache_name;
 crop_mode    = voc_config.crop_mode;
 crop_padding = voc_config.crop_padding;
 name = voc_config.name;
@@ -24,7 +24,7 @@ model_save_path = fullfile('data', 'rcnn_models', name, cache_name, sprintf('rcn
 model_dir = fileparts(model_save_path);
 mkdir_if_missing(model_dir);
 
-if exist(model_save_path, 'file') 
+if exist(model_save_path, 'file')
     clear rcnn_model rcnn_k_fold_model
     load(model_save_path);
 else

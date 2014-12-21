@@ -12,3 +12,4 @@ cachedir/*
 external/caffe
 *.tgz
 *.swp
+*.o

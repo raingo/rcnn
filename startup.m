@@ -16,6 +16,7 @@ addpath('bin');
 addpath('nms');
 addpath('finetuning');
 addpath('bbox_regression');
+addpath('external/liblinear-1.94/matlab/');
 if exist('external/caffe/matlab/caffe')
   addpath('external/caffe/matlab/caffe');
 else

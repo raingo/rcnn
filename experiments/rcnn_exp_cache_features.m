@@ -3,7 +3,7 @@ function rcnn_exp_cache_features(chunk)
 % -------------------- CONFIG --------------------
 voc_config = get_cur_voc_name();
 net_file = voc_config.net_file;
-cache_namae = voc_config.cache_name;
+cache_name = voc_config.cache_name;
 crop_mode    = voc_config.crop_mode;
 crop_padding = voc_config.crop_padding;
 name = voc_config.name;
