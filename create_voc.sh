@@ -67,7 +67,7 @@ n_neg=`echo $n_pos '*' $neg_to_pos_ratio | bc `
 
 echo val $n_pos $n_neg
 
-cat $sets_dir/val-val.txt | xargs -L 1 -I {} grep -vl "$cls_list" $base_dir/ILSVRC2013_DET_bbox_val/'{}'.xml | head -$n_neg | xargs -L 1 basename | rev | cut -c 5- | rev > $sets_dir/val-neg.txt
+cat $sets_dir/val-val.txt | xargs -L 1 -I {} grep -L "$cls_list" $base_dir/ILSVRC2013_DET_bbox_val/'{}'.xml | sort -R | head -$n_neg | xargs -L 1 basename | rev | cut -c 5- | rev > $sets_dir/val-neg.txt
 
 cat $sets_dir/val-pos.txt $sets_dir/val-neg.txt > $sets_dir/val.txt
 echo linking val set
