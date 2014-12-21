@@ -4,12 +4,8 @@
 base_dir=`pwd`/datasets/ILSVRC2014
 
 #name=exp-baseline
-#n_neg=10000
-#n_pos=10000000
 
 name=sanity-check
-n_neg=100
-n_pos=100
 
 output_dir=`pwd`/datasets/VOCdevkit2007/data/$name
 
@@ -37,9 +33,12 @@ for cls in `cat $output_dir/cls-list.txt`
 do
     cls_id=`cat $meta_det_txt | grep $cls | awk -F'\t' '{print $1}'`
     echo $cls $cls_id
-    cat $det_lists_dir/train_pos_$cls_id.txt | sort -R | head -$n_pos >> $sets_dir/train.txt
-    cat $det_lists_dir/train_neg_$cls_id.txt | sort -R | head -$n_neg >> $sets_dir/train.txt
+    cat $det_lists_dir/train_pos_$cls_id.txt | sort -R  >> $sets_dir/train.txt
+    cat $det_lists_dir/train_neg_$cls_id.txt | sort -R  >> $sets_dir/train.txt
 done
+
+cat $sets_dir/train.txt | sort | uniq > $sets_dir/train-uniq.txt
+cat $sets_dir/train-uniq.txt | sort -R > $sets_dir/train.txt
 
 echo linking train set
 ./link_files.sh $base_dir/ILSVRC2014_DET_train $sets_dir/train.txt JPEG $jpg_dir
