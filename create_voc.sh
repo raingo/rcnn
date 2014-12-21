@@ -46,19 +46,31 @@ echo linking train set
 
 # val set
 echo linking val set
-cat $det_lists_dir/val.txt | awk '{print $1}' | sort -R | head -$n_pos > $sets_dir/val.txt
+
+cls_list="dummy"
+
+for cls in `cat $output_dir/cls-list.txt`
+do
+    cls_list=$cls_list"|"$cls
+done
+
+
+python remove_blacklist.py $det_lists_dir/../ILSVRC2014_det_validation_blacklist.txt $det_lists_dir/val.txt | xargs -L 1 -I {} grep -l $cls_list $base_dir/ILSVRC2013_DET_bbox_val/'{}'.xml | xargs -L 1 basename | rev | cut -c 5- | rev > $sets_dir/val.txt
+
 ./link_files.sh $base_dir/ILSVRC2013_DET_val $sets_dir/val.txt JPEG $jpg_dir
 ./link_files.sh $base_dir/ILSVRC2013_DET_bbox_val $sets_dir/val.txt xml $anno_dir 2>&1 /dev/null
 
 # test set
+if [ 0 == 1 ]
+then
 echo linking test set
 cat $det_lists_dir/test.txt | awk '{print $1}' | sort -R | head -$n_pos > $sets_dir/test.txt
 ./link_files.sh $base_dir/ILSVRC2013_DET_test $sets_dir/test.txt JPEG $jpg_dir
+fi
 
 # post-processing
 echo post-processing
 find $anno_dir -type l -exec test ! -e {} \; -delete
-cat $sets_dir/train.txt $sets_dir/val.txt > $sets_dir/trainval.txt
-
+#cat $sets_dir/train.txt $sets_dir/val.txt > $sets_dir/trainval.txt
 
 find $sets_dir -type f | xargs wc
