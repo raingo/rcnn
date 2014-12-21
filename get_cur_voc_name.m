@@ -1,7 +1,7 @@
 
 function voc_config = get_cur_voc_name()
     voc_confg = [];
-    name = 'exp-baseline';
+    voc_config.name = 'exp-baseline';
     % voc_config.name = 'sanity-check';
 
     voc_config.net_file     = './data/caffe_nets/finetune_voc_2007_trainval_iter_70k';
