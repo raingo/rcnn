@@ -3,9 +3,8 @@
 
 base_dir=`pwd`/datasets/ILSVRC2014
 
-#name=exp-baseline
-
-name=sanity-check
+name=exp-baseline
+#name=sanity-check
 
 output_dir=`pwd`/datasets/VOCdevkit2007/data/$name
 
@@ -28,13 +27,17 @@ mkdir -p $jpg_dir
 meta_det_txt=$base_dir/ILSVRC2014_devkit/data/meta-det.txt
 det_lists_dir=$base_dir/ILSVRC2014_devkit/data/det_lists
 
+neg_to_pos_ratio=7
+
 # train set
 for cls in `cat $output_dir/cls-list.txt`
 do
     cls_id=`cat $meta_det_txt | grep $cls | awk -F'\t' '{print $1}'`
-    echo $cls $cls_id
     cat $det_lists_dir/train_pos_$cls_id.txt | sort -R  >> $sets_dir/train.txt
-    cat $det_lists_dir/train_neg_$cls_id.txt | sort -R  >> $sets_dir/train.txt
+    n_pos=`cat $det_lists_dir/train_pos_$cls_id.txt | wc -l`
+    n_neg=`echo $n_pos '*' $neg_to_pos_ratio | bc`
+    echo $cls $cls_id $n_pos $n_neg
+    cat $det_lists_dir/train_neg_$cls_id.txt | sort -R  | head -$n_neg >> $sets_dir/train.txt
 done
 
 cat $sets_dir/train.txt | sort | uniq > $sets_dir/train-uniq.txt
@@ -45,17 +48,29 @@ echo linking train set
 ./link_files.sh $base_dir/ILSVRC2014_DET_bbox_train $sets_dir/train.txt xml $anno_dir 2>&1 /dev/null
 
 # val set
-echo linking val set
+echo generating val set
 
 cls_list="dummy"
 
 for cls in `cat $output_dir/cls-list.txt`
 do
-    cls_list=$cls_list"|"$cls
+    cls_list=$cls_list"\|"$cls
 done
 
+echo $cls_list
 
-python remove_blacklist.py $det_lists_dir/../ILSVRC2014_det_validation_blacklist.txt $det_lists_dir/val.txt | xargs -L 1 -I {} grep -l $cls_list $base_dir/ILSVRC2013_DET_bbox_val/'{}'.xml | xargs -L 1 basename | rev | cut -c 5- | rev > $sets_dir/val.txt
+python remove_blacklist.py $det_lists_dir/../ILSVRC2014_det_validation_blacklist.txt $det_lists_dir/val.txt  > $sets_dir/val-val.txt
+
+cat $sets_dir/val-val.txt | xargs -L 1 -I {} grep -l "$cls_list" $base_dir/ILSVRC2013_DET_bbox_val/'{}'.xml | xargs -L 1 basename | rev | cut -c 5- | rev > $sets_dir/val-pos.txt
+n_pos=`cat $sets_dir/val-pos.txt | wc -l`
+n_neg=`echo $n_pos '*' $neg_to_pos_ratio | bc `
+
+echo val $n_pos $n_neg
+
+cat $sets_dir/val-val.txt | xargs -L 1 -I {} grep -vl "$cls_list" $base_dir/ILSVRC2013_DET_bbox_val/'{}'.xml | head -$n_neg | xargs -L 1 basename | rev | cut -c 5- | rev > $sets_dir/val-neg.txt
+
+cat $sets_dir/val-pos.txt $sets_dir/val-neg.txt > $sets_dir/val.txt
+echo linking val set
 
 ./link_files.sh $base_dir/ILSVRC2013_DET_val $sets_dir/val.txt JPEG $jpg_dir
 ./link_files.sh $base_dir/ILSVRC2013_DET_bbox_val $sets_dir/val.txt xml $anno_dir 2>&1 /dev/null

@@ -12,7 +12,7 @@ name = voc_config.name;
 VOCdevkit = './datasets/VOCdevkit2007';
 % ------------------------------------------------
 
-imdb_trainval = imdb_from_voc(VOCdevkit, 'trainval', name);
+%imdb_trainval = imdb_from_voc(VOCdevkit, 'trainval', name);
 
 switch chunk
   case 'train'
@@ -22,7 +22,7 @@ switch chunk
         'crop_padding', crop_padding, ...
         'net_file', net_file, ...
         'cache_name', cache_name);
-    link_up_trainval(cache_name, imdb_train, imdb_trainval);
+    %link_up_trainval(cache_name, imdb_train, imdb_trainval);
   case 'val'
     imdb_val   = imdb_from_voc(VOCdevkit, 'val', name);
     rcnn_cache_pool5_features(imdb_val, ...
@@ -30,7 +30,7 @@ switch chunk
         'crop_padding', crop_padding, ...
         'net_file', net_file, ...
         'cache_name', cache_name);
-    link_up_trainval(cache_name, imdb_val, imdb_trainval);
+    %link_up_trainval(cache_name, imdb_val, imdb_trainval);
   case 'test_1'
     imdb_test  = imdb_from_voc(VOCdevkit, 'test', name);
     end_at = ceil(length(imdb_test.image_ids)/2);
