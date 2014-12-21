@@ -17,7 +17,7 @@ def main():
         size = root.find('size')
         width = size.find('width')
         height = size.find('height')
-        print '\t'.join(path, width.text, height.text)
+        print '\t'.join([path, width.text, height.text])
 
 
     pass
