@@ -41,6 +41,7 @@ catch
     catch
       voc_rec = [];
     end
+
     roidb.rois(i) = attach_proposals(voc_rec, regions.boxes{i}, imdb.class_to_id);
   end
 
@@ -58,6 +59,13 @@ function rec = attach_proposals(voc_rec, boxes, class_to_id)
 
 % change selective search order from [y1 x1 y2 x2] to [x1 y1 x2 y2]
 boxes = boxes(:, [2 1 4 3]);
+
+maxBoxes = 10000;
+nBoxes = size(boxes, 1);
+if nBoxes > maxBoxes
+    rndIdx = randperm(nBoxes);
+    boxes = boxes(rndIdx(1:maxBoxes), :);
+end
 
 %           gt: [2108x1 double]
 %      overlap: [2108x20 single]

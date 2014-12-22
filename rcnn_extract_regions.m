@@ -37,8 +37,8 @@ crop_size = size(image_mean,1);
 crop_padding = rcnn_model.detectors.crop_padding;
 
 batches = cell(num_batches, 1);
-%for batch = 1:num_batches
-parfor batch = 1:num_batches
+for batch = 1:num_batches
+%parfor batch = 1:num_batches
   batch_start = (batch-1)*batch_size+1;
   batch_end = min(num_boxes, batch_start+batch_size-1);
 
