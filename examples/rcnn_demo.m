@@ -2,16 +2,16 @@ function rcnn_demo(demo_choice, use_gpu)
 % rcnn_demo(demo_choice, use_gpu)
 %   Run the R-CNN demo on a test image. Set use_gpu = false to run
 %   in CPU mode. (GPU mode is the default.)
-%   demo_choice selects between fine-tuned R-CNN models trained on 
-%   'PASCAL' or 'ILSVRC13' 
+%   demo_choice selects between fine-tuned R-CNN models trained on
+%   'PASCAL' or 'ILSVRC13'
 
 % AUTORIGHTS
 % ---------------------------------------------------------
 % Copyright (c) 2014, Ross Girshick
-% 
-% This file is part of the R-CNN code and is available 
-% under the terms of the Simplified BSD License provided in 
-% LICENSE. Please retain this notice and LICENSE if you use 
+%
+% This file is part of the R-CNN code and is available
+% under the terms of the Simplified BSD License provided in
+% LICENSE. Please retain this notice and LICENSE if you use
 % this file (or any portion of it) in your project.
 % ---------------------------------------------------------
 
@@ -32,8 +32,11 @@ switch demo_choice
     % Example using the ILSVRC13 fine-tuned detectors (200 classes)
     rcnn_model_file = './data/rcnn_models/ilsvrc2013/rcnn_model.mat';
     im = imread('./examples/images/fish-bike.jpg');
+  case 'Purse'
+    rcnn_model_file = './data/rcnn_models/voc_exp-baseline_train/rcnn_model.mat';
+    im = imread('./examples/images/purse.jpg');
   otherwise
-    error('unknown demo ''%s'' [valid options: ''PASCAL'' or ''ILSVRC13'']', demo_choice);
+    error('unknown demo ''%s'' [valid options: ''PASCAL'' or ''ILSVRC13'' or ''Purse'']', demo_choice);
 end
 
 if ~exist(rcnn_model_file, 'file')
@@ -69,6 +72,8 @@ for i = 1:length(dets)
   all_dets = cat(1, all_dets, ...
       [i * ones(size(dets{i}, 1), 1) dets{i}]);
 end
+
+size(all_dets)
 
 [~, ord] = sort(all_dets(:,end), 'descend');
 for i = 1:length(ord)
