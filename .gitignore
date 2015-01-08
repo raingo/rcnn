@@ -8,7 +8,7 @@ data/rcnn_models
 data/selective_search_data
 data/window_files
 rcnn_config_local.m
-cachedir/*
+cachedir*
 external/caffe
 *.tgz
 *.swp

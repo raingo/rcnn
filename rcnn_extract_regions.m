@@ -14,10 +14,10 @@ function [batches, batch_padding] = rcnn_extract_regions(im, boxes, rcnn_model)
 % AUTORIGHTS
 % ---------------------------------------------------------
 % Copyright (c) 2014, Ross Girshick
-% 
-% This file is part of the R-CNN code and is available 
-% under the terms of the Simplified BSD License provided in 
-% LICENSE. Please retain this notice and LICENSE if you use 
+%
+% This file is part of the R-CNN code and is available
+% under the terms of the Simplified BSD License provided in
+% LICENSE. Please retain this notice and LICENSE if you use
 % this file (or any portion of it) in your project.
 % ---------------------------------------------------------
 
@@ -37,8 +37,8 @@ crop_size = size(image_mean,1);
 crop_padding = rcnn_model.detectors.crop_padding;
 
 batches = cell(num_batches, 1);
-for batch = 1:num_batches
-%parfor batch = 1:num_batches
+%for batch = 1:num_batches
+parfor batch = 1:num_batches
   batch_start = (batch-1)*batch_size+1;
   batch_end = min(num_boxes, batch_start+batch_size-1);
 
