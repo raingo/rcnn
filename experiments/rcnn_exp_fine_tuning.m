@@ -13,5 +13,17 @@ val_set = 'val';
 imdb_train = imdb_from_voc(VOCdevkit, train_set, name);
 imdb_val = imdb_from_voc(VOCdevkit, val_set, name);
 
-rcnn_make_window_file(imdb_train, 'external/caffe/examples/finetune_pascal_detection');
-rcnn_make_window_file(imdb_val, 'external/caffe/examples/finetune_pascal_detection');
+save_dir = fullfile('external/caffe/examples/finetune_pascal_detection/', name);
+if ~exist(save_dir, 'dir')
+    mkdir(save_dir);
+end
+
+try
+rcnn_make_window_file(imdb_train, save_dir);
+rcnn_make_window_file(imdb_val, save_dir);
+catch ME
+    fprintf('Error: %s', ME.message);
+    disp(err.stack);
+end
+
+email_notify(sprintf('%s finished', mfilename));

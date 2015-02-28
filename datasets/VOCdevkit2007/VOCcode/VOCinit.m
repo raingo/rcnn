@@ -5,7 +5,7 @@ clear VOCopts
 % mode = 'VOC2007';
 % mode = 'exp-baseline';
 if ~exist('mode', 'var')
-    mode = 'sanity-check';
+    mode = 'VOC2007';
 end
 
 %
@@ -39,11 +39,13 @@ VOCopts.testset='val'; % use validation data for development test set
 
 VOCopts.annopath=[VOCopts.datadir VOCopts.dataset '/Annotations/%s.xml'];
 
-if ~strcmp(mode, 'VOC2007') && ~strcmp(mode, 'VOC2006')
+if ~strcmp(mode, 'VOC2007') && ~strcmp(mode, 'VOC2006') && isempty(findstr('coco', mode))
     ext = 'JPEG';
 else
     ext = 'jpg';
 end
+
+fprintf('ext: %s\n', ext);
 
 VOCopts.imgpath=[VOCopts.datadir VOCopts.dataset '/JPEGImages/%s.' ext ];
 VOCopts.imgsetpath=[VOCopts.datadir VOCopts.dataset '/ImageSets/Main/%s.txt'];
@@ -119,7 +121,7 @@ switch mode
         VOCopts.classes = fields{1};
 end
 
-VOCopts.nclasses=length(VOCopts.classes);	
+VOCopts.nclasses=length(VOCopts.classes);
 
 VOCopts.poses={...
 'Unspecified'
@@ -133,7 +135,7 @@ VOCopts.nposes=length(VOCopts.poses);
 VOCopts.parts={...
 'head'
 'hand'
-'foot'};    
+'foot'};
 
 VOCopts.maxparts=[1 2 2];   % max of each of above parts
 

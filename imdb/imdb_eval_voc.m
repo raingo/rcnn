@@ -8,10 +8,10 @@ function res = imdb_eval_voc(cls, boxes, imdb, suffix, nms_thresh)
 % AUTORIGHTS
 % ---------------------------------------------------------
 % Copyright (c) 2014, Ross Girshick
-% 
-% This file is part of the R-CNN code and is available 
-% under the terms of the Simplified BSD License provided in 
-% LICENSE. Please retain this notice and LICENSE if you use 
+%
+% This file is part of the R-CNN code and is available
+% under the terms of the Simplified BSD License provided in
+% LICENSE. Please retain this notice and LICENSE if you use
 % this file (or any portion of it) in your project.
 % ---------------------------------------------------------
 
@@ -19,7 +19,7 @@ function res = imdb_eval_voc(cls, boxes, imdb, suffix, nms_thresh)
 % to prevent concurrent evaluations from clobbering each other
 use_res_salt = true;
 % Delete results files after computing APs
-rm_res = true;
+rm_res = false;
 % comp4 because we use outside data (ILSVRC2012)
 comp_id = 'comp4';
 
@@ -42,7 +42,7 @@ image_ids = imdb.image_ids;
 test_set = VOCopts.testset;
 year = VOCopts.dataset(4:end);
 
-addpath(fullfile(VOCopts.rootdir, 'VOCcode')); 
+addpath(fullfile(VOCopts.rootdir, 'VOCcode'));
 
 if use_res_salt
   prev_rng = rng;
@@ -104,4 +104,4 @@ if rm_res
   delete(res_fn);
 end
 
-rmpath(fullfile(VOCopts.rootdir, 'VOCcode')); 
+rmpath(fullfile(VOCopts.rootdir, 'VOCcode'));
