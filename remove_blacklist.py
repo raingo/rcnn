@@ -6,16 +6,18 @@ Python source code - replace this with a description of the code and write the c
 
 def main():
 
-    import sys
+    import sys, os
 
     bk_fn = sys.argv[1]
     list_fn = sys.argv[2]
 
     bk_set = set()
-    with open(bk_fn) as reader:
-        for line in reader:
-            fields = line.strip().split(' ')
-            bk_set.add(fields[0])
+
+    if os.path.exists(bk_fn):
+        with open(bk_fn) as reader:
+            for line in reader:
+                fields = line.strip().split(' ')
+                bk_set.add(fields[0])
 
     with open(list_fn) as reader:
         for line in reader:
