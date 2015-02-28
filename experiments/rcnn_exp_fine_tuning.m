@@ -15,3 +15,5 @@ imdb_val = imdb_from_voc(VOCdevkit, val_set, name);
 
 rcnn_make_window_file(imdb_train, 'external/caffe/examples/finetune_pascal_detection');
 rcnn_make_window_file(imdb_val, 'external/caffe/examples/finetune_pascal_detection');
+
+email_notify(sprintf('rcnn make window file done: %s', mfilename));
