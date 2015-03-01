@@ -9,6 +9,7 @@ sys.path.append('/homes/ycli/caffe/data/coco/')
 from MyCOCO import *
 import xml.etree.cElementTree as ET
 from xml.dom import minidom
+import math
 
 def prettify(elem):
     """Return a pretty-printed XML string for the Element.
@@ -50,6 +51,19 @@ def create_xml(ann_list, image_info, output_dir):
         writer.write(prettify(root))
 
 
+def segm2bbox(segm):
+
+    segm_x = [segm[i] for i in range(0, len(segm), 2)]
+    segm_y = [segm[i + 1] for i in range(0, len(segm), 2)]
+
+    x_min = math.floor(min(segm_x))
+    y_min = math.floor(min(segm_y))
+
+    width = math.ceil(max(segm_x) - x_min)
+    height = math.ceil(max(segm_y) - y_min)
+
+    return (x_min, y_min, width, height)
+
 def create_bbox_xml(coco, output_dir):
 
     for coco_id, image_info in coco.coco.images.items():
@@ -58,7 +72,16 @@ def create_bbox_xml(coco, output_dir):
             cat_id = ann['category_id']
             bbox = ann['bbox']
             area = ann['area']
-            ann_list.append((cat_id, bbox, area))
+            segm_list = ann['segmentation']
+            isCrowd = ann['iscrowd']
+
+            if isCrowd:
+                continue
+
+            for segm in segm_list:
+                bbox = segm2bbox(segm)
+                if bbox[2] * bbox[3] > 20:
+                    ann_list.append((cat_id, bbox, area))
 
         create_xml(ann_list, image_info, output_dir)
 
