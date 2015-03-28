@@ -13,3 +13,4 @@ external/caffe
 *.tgz
 *.swp
 *.o
+feat-cache

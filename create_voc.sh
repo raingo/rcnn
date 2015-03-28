@@ -1,9 +1,10 @@
 
 #base_dir=`pwd`/datasets/ILSVRC2014
-base_dir=`pwd`/datasets/COCO/ILSVRC2014
+base_dir=`pwd`/datasets/COCO/ILSVRC2014_ss
 
 #name=coco-baseline
-name=coco-full-100
+#name=coco-subset-100
+name=coco-full-103
 #name=sanity-check
 
 output_dir=`pwd`/datasets/VOCdevkit2007/data/$name
@@ -27,8 +28,8 @@ mkdir -p $jpg_dir
 meta_det_txt=$base_dir/ILSVRC2014_devkit/data/meta-det.txt
 det_lists_dir=$base_dir/ILSVRC2014_devkit/data/det_lists
 
-max_pos=100
-neg_to_pos_ratio=7
+max_pos=103
+neg_to_pos_ratio=1
 
 if [ 1 == 1 ]
 then

@@ -19,6 +19,7 @@ VOCdevkit = './datasets/VOCdevkit2007';
 train_set = 'train';
 imdb_train = imdb_from_voc(VOCdevkit, train_set, name);
 imdb_test = imdb_from_voc(VOCdevkit, 'val', name);
+%imdb_test = imdb_from_voc(VOCdevkit, 'train', name);
 
 model_save_path = fullfile('data', 'rcnn_models', name, cache_name, sprintf('rcnn_model-%s-%s-%d-%d-%d.mat', train_set, crop_mode, crop_padding, layer, k_folds));
 model_dir = fileparts(model_save_path);
@@ -45,4 +46,8 @@ else
     res_train = [];
 end
 
+imdb_test.details.VOCopts.test_set = 'val';
 res_test = rcnn_test(rcnn_model, imdb_test);
+
+imdb_train.details.VOCopts.test_set = 'train';
+res_train= rcnn_test(rcnn_model, imdb_train);

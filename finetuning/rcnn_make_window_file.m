@@ -25,6 +25,8 @@ function rcnn_make_window_file(imdb, out_dir)
 % ---------------------------------------------------------
 
 roidb = imdb.roidb_func(imdb);
+diary_path = fullfile(out_dir, 'diary.out');
+diary(diary_path);
 
 window_file = sprintf('%s/window_file_%s.txt', ...
     out_dir, imdb.name);

@@ -9,10 +9,10 @@ function roidb = roidb_from_voc(imdb)
 % AUTORIGHTS
 % ---------------------------------------------------------
 % Copyright (c) 2014, Ross Girshick
-% 
-% This file is part of the R-CNN code and is available 
-% under the terms of the Simplified BSD License provided in 
-% LICENSE. Please retain this notice and LICENSE if you use 
+%
+% This file is part of the R-CNN code and is available
+% under the terms of the Simplified BSD License provided in
+% LICENSE. Please retain this notice and LICENSE if you use
 % this file (or any portion of it) in your project.
 % ---------------------------------------------------------
 
@@ -22,7 +22,7 @@ try
 catch
   VOCopts = imdb.details.VOCopts;
 
-  addpath(fullfile(VOCopts.rootdir, 'VOCcode')); 
+  addpath(fullfile(VOCopts.rootdir, 'VOCcode'));
 
   roidb.name = imdb.name;
 
@@ -45,7 +45,7 @@ catch
     roidb.rois(i) = attach_proposals(voc_rec, regions.boxes{i}, imdb.class_to_id);
   end
 
-  rmpath(fullfile(VOCopts.rootdir, 'VOCcode')); 
+  rmpath(fullfile(VOCopts.rootdir, 'VOCcode'));
 
   fprintf('Saving roidb to cache...');
   save(cache_file, 'roidb', '-v7.3');
@@ -56,6 +56,17 @@ end
 % ------------------------------------------------------------------------
 function rec = attach_proposals(voc_rec, boxes, class_to_id)
 % ------------------------------------------------------------------------
+
+if isempty(boxes)
+    rec = [];
+    rec.gt = [];
+    rec.overlap = [];
+    rec.boxes = [];
+    rec.feat = [];
+    rec.class = [];
+    fprintf('no proposal was found\n');
+    return;
+end
 
 % change selective search order from [y1 x1 y2 x2] to [x1 y1 x2 y2]
 boxes = boxes(:, [2 1 4 3]);
