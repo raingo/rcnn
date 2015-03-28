@@ -5,7 +5,7 @@ Python source code - replace this with a description of the code and write the c
 """
 
 import sys
-sys.path.append('/homes/ycli/caffe/data/coco/')
+sys.path.append('/homes/ycli/ycli-data/coco/caffe/')
 from MyCOCO import *
 import xml.etree.cElementTree as ET
 from xml.dom import minidom
@@ -66,17 +66,22 @@ def segm2bbox(segm):
 
 def create_bbox_xml(coco, output_dir):
 
-    for coco_id, image_info in coco.coco.images.items():
+    for coco_id in coco.coco.getImgIds():
+        image_info = coco.coco.loadImgs([coco_id])[0]
         ann_list = []
-        for ann in coco.coco.loadAnnotations(params = {'im_id_list':[coco_id]}):
+        annIds = coco.coco.getAnnIds(imgIds = coco_id)
+        for ann in coco.coco.loadAnns(annIds):
             cat_id = ann['category_id']
             bbox = ann['bbox']
             area = ann['area']
             segm_list = ann['segmentation']
             isCrowd = ann['iscrowd']
 
-            if isCrowd:
+            if isCrowd or len(segm_list) > 1:
                 continue
+
+            ann_list.append((cat_id, bbox, area))
+            continue
 
             for segm in segm_list:
                 bbox = segm2bbox(segm)
@@ -89,7 +94,7 @@ def create_bbox_xml(coco, output_dir):
 def dump_cls_mapper(coco, save_path):
     with open(save_path, 'w') as writer:
         for cat_id, cat_uid in coco.label_map.items():
-            writer.write('%d\tcat-%d\t%s\n' % (cat_uid, cat_id, coco.coco.categories[cat_id]['name']))
+            writer.write('%d\tcat-%d\t%s\n' % (cat_uid, cat_id, coco.catid2name[cat_id]))
 
 def write_list(src, save_path):
     with open(save_path, 'w') as writer:
@@ -97,10 +102,10 @@ def write_list(src, save_path):
             writer.write(item + '\n')
 
 def create_per_class_list(coco, save_dir, prefix):
-    all_imgIds = set(coco.coco.getImageIds())
+    all_imgIds = set(coco.coco.getImgIds())
 
     def cocoId2imgName(coco_id):
-        image_info = coco.coco.images[coco_id]
+        image_info = coco.coco.loadImgs([coco_id])[0]
         image_fn = image_info['file_name']
         imgName, _ = os.path.splitext(image_fn)
         return imgName
@@ -110,7 +115,7 @@ def create_per_class_list(coco, save_dir, prefix):
 
     for cat_id, cat_uid in coco.label_map.items():
 
-        pos_ids = coco.coco.getImageIds(params = {'cat_id':cat_id})
+        pos_ids = coco.coco.getImgIds(catIds = [cat_id])
         neg_ids = all_imgIds - set(pos_ids)
 
         pos_names = [cocoId2imgName(coco_id) for coco_id in pos_ids]
@@ -126,10 +131,11 @@ def main():
     meta_dir = sys.argv[4]
 
     coco = MyCOCO(ann_json)
-    create_bbox_xml(coco, output_dir)
 
     dump_cls_mapper(coco, os.path.join(meta_dir, 'meta-det.txt'))
     create_per_class_list(coco, os.path.join(meta_dir, 'det_lists'), mode)
+
+    create_bbox_xml(coco, output_dir)
 
     pass
 

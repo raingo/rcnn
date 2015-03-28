@@ -48,7 +48,7 @@ function viewdet(VOCopts,cls,comp_id,onlytp)
         save(gt_cache_path, 'npos', 'gt');
     end
 
-    res_pattern = sprintf(VOCopts.detrespath, [comp_id '*'], cls);
+    res_pattern = sprintf(VOCopts.detrespath, [comp_id '-*'], VOCopts.testset, cls);
     res_path = dir(res_pattern);
 
     res_path = fullfile(VOCopts.resdir, 'Main', res_path(1).name);

@@ -1,6 +1,6 @@
 function [images, boxes] = selective_search_boxes_local(imdb)
 
-    n_processes = 12;
+    n_processes = 6;
     n_tasks = length(imdb.image_ids);
 
     task_per_process = ceil(n_tasks / n_processes);

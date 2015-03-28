@@ -14,10 +14,10 @@ for i=1:length(gtids)
         drawnow;
         tic;
     end
-    
+
     % read annotation
     rec=PASreadrecord(sprintf(VOCopts.annopath,gtids{i}));
-    
+
     % extract objects of class
     clsinds=strmatch(cls,{rec.objects(:).class},'exact');
     gt(i).BB=cat(1,rec.objects(clsinds).bbox)';
@@ -27,7 +27,7 @@ for i=1:length(gtids)
 end
 
 % load results
-[ids,confidence,b1,b2,b3,b4]=textread(sprintf(VOCopts.detrespath,id,cls),'%s %f %f %f %f %f');
+[ids,confidence,b1,b2,b3,b4]=textread(sprintf(VOCopts.detrespath,id,VOCopts.test_set,cls),'%s %f %f %f %f %f');
 BB=[b1 b2 b3 b4]';
 
 % sort detections by decreasing confidence
@@ -47,7 +47,7 @@ for d=1:nd
         drawnow;
         tic;
     end
-    
+
     % find ground truth image
     i=strmatch(ids{d},gtids,'exact');
     if isempty(i)
@@ -64,7 +64,7 @@ for d=1:nd
         bi=[max(bb(1),bbgt(1)) ; max(bb(2),bbgt(2)) ; min(bb(3),bbgt(3)) ; min(bb(4),bbgt(4))];
         iw=bi(3)-bi(1)+1;
         ih=bi(4)-bi(2)+1;
-        if iw>0 & ih>0                
+        if iw>0 & ih>0
             % compute overlap as area of intersection / area of union
             ua=(bb(3)-bb(1)+1)*(bb(4)-bb(2)+1)+...
                (bbgt(3)-bbgt(1)+1)*(bbgt(4)-bbgt(2)+1)-...

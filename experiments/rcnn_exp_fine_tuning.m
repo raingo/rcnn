@@ -19,11 +19,14 @@ if ~exist(save_dir, 'dir')
 end
 
 try
-rcnn_make_window_file(imdb_train, save_dir);
-rcnn_make_window_file(imdb_val, save_dir);
+    rcnn_make_window_file(imdb_train, save_dir);
+    rcnn_make_window_file(imdb_val, save_dir);
 catch ME
     fprintf('Error: %s', ME.message);
-    disp(err.stack);
+    for i = 1:length(ME.stack)
+        disp(ME.stack(i));
+    end
 end
+diary off
 
 email_notify(sprintf('%s finished', mfilename));

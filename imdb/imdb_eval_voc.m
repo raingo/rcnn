@@ -53,7 +53,7 @@ if use_res_salt
 else
   res_id = comp_id;
 end
-res_fn = sprintf(VOCopts.detrespath, res_id, cls);
+res_fn = sprintf(VOCopts.detrespath, res_id, test_set, cls);
 
 res_dir = fileparts(res_fn);
 mkdir_if_missing(res_dir);
