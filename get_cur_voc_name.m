@@ -18,6 +18,15 @@ function voc_config = get_cur_voc_name()
         voc_config.name = 'coco-full-100';
         voc_config.net_file = '/homes/ycli/caffe/examples/finetune_pascal_detection/coco-full-100/finetune-80K_iter_80000.caffemodel';
         voc_config.cache_name = 'coco_2014_full-100';
+    elseif strcmp(rcnn_exp, 'coco-full-102')
+        voc_config.name = 'coco-full-102';
+        voc_config.net_file = '/homes/ycli/caffe/examples/finetune_pascal_detection/coco-full-100/finetune-80K_iter_80000.caffemodel';
+        voc_config.cache_name = 'coco_2014_full-102';
+    elseif strcmp(rcnn_exp, 'coco-subset-100')
+        voc_config.name = 'coco-subset-100';
+        voc_config.net_file = '/homes/ycli/caffe/examples/finetune_pascal_detection/coco-full-100/finetune-80K_iter_80000.caffemodel';
+        voc_config.cache_name = 'coco_2014_full-102';
+
     else
         error('dont know which experiment to run, specify by RCNN_EXP');
     end
