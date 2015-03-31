@@ -46,8 +46,15 @@ else
     res_train = [];
 end
 
-imdb_test.details.VOCopts.test_set = 'val';
-res_test = rcnn_test(rcnn_model, imdb_test);
+result_save_path = fullfile('data', 'rcnn_models', name, cache_name, sprintf('rcnn_result-%s-%s-%d-%d-%d.mat', train_set, crop_mode, crop_padding, layer, k_folds));
 
-imdb_train.details.VOCopts.test_set = 'train';
-res_train= rcnn_test(rcnn_model, imdb_train);
+if exist(result_save_path, 'file')
+    load(result_save_path);
+else
+    imdb_test.details.VOCopts.test_set = 'val';
+    res_test = rcnn_test(rcnn_model, imdb_test);
+
+    imdb_train.details.VOCopts.test_set = 'train';
+    res_train= rcnn_test(rcnn_model, imdb_train);
+    save(result_save_path, 'res_test', 'res_train');
+end
