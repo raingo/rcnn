@@ -10,7 +10,7 @@ function res = imdb_vis_det(imdb)
 
     %for i = 1:length(VOCopts.classes)
     i = 1;
-    viewdet(VOCopts, VOCopts.classes{i}, comp_id);
+    viewdet(VOCopts, VOCopts.classes{i}, comp_id, false);
     %end
 
     rmpath(VOCopts.rootdir);
